@@ -14,6 +14,8 @@ kubectl run --image=$dockerpath udacity-ml --port=80 -n sre
 # List kubernetes pods
 kubectl get pods -n  sre
 podname=$(kubectl get pods -o json -n sre | jq -r .items[].metadata.name)
+# Giving some time to be ready 
+sleep 30
 # Step 4:
 # Forward the container port to a host
 kubectl port-forward $podname  8000:80
