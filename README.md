@@ -1,44 +1,28 @@
-[![<ORG_NAME>](https://circleci.com/<VCS>/<ORG_NAME>/<PROJECT_NAME>.svg?style=svg)](<LINK>)
-
 [![edgar-mercado](https://circleci.com/gh/edgar-mercado/operationalize-ml-k8s.svg?style=svg)](https://app.circleci.com/github/edgar-mercado/operationalize-ml-k8s/pipelines)
 
 ## Project Overview
 
-In this project, you will apply the skills you have acquired in this course to operationalize a Machine Learning Microservice API.
+This project shows how to operationalize a Machine Learning Microservice API given a pre-trained, `sklearn` model that has been trained to predict housing prices in Boston according to several features, such as average rooms in a home and data about highway access, teacher-to-pupil ratios, and so on. The project will help to pass one of the assignments in the DevOps nano-degree.
 
-You are given a pre-trained, `sklearn` model that has been trained to predict housing prices in Boston according to several features, such as average rooms in a home and data about highway access, teacher-to-pupil ratios, and so on. You can read more about the data, which was initially taken from Kaggle, on [the data source site](https://www.kaggle.com/c/boston-housing). This project tests your ability to operationalize a Python flask app—in a provided file, `app.py`—that serves out predictions (inference) about housing prices through API calls. This project could be extended to any pre-trained machine learning model, such as those for image recognition and data labeling.
+### Requirements
+- Linux/OSX
+- Kubernetes
+- Port 8000 available
 
-### Project Tasks
+### Steps to run the project
 
-Your project goal is to operationalize this working, machine learning microservice using [kubernetes](https://kubernetes.io/), which is an open-source system for automating the management of containerized applications. In this project you will:
-* Test your project code using linting
-* Complete a Dockerfile to containerize this application
-* Deploy your containerized application using Docker and make a prediction
-* Improve the log statements in the source code for this application
-* Configure Kubernetes and create a Kubernetes cluster
-* Deploy a container using Kubernetes and make a prediction
-* Upload a complete Github repo with CircleCI to indicate that your code has been tested
+In a terminal execute the following commands
+* Clone the repository `git clone git@github.com:edgar-mercado/operationalize-ml-k8s.git`
+* Deploy in kubernetes `./run_kubernetes.sh`
+* Open a new terminal and execute the following command to make a prediction `./make_prediction.sh`
 
-You can find a detailed [project rubric, here](https://review.udacity.com/#!/rubrics/2576/view).
-
-**The final implementation of the project will showcase your abilities to operationalize production microservices.**
-
----
-
-## Setup the Environment
-
-* Create a virtualenv and activate it
-* Run `make install` to install the necessary dependencies
-
-### Running `app.py`
-
-1. Standalone:  `python app.py`
-2. Run in Docker:  `./run_docker.sh`
-3. Run in Kubernetes:  `./run_kubernetes.sh`
-
-### Kubernetes Steps
-
-* Setup and Configure Docker locally
-* Setup and Configure Kubernetes locally
-* Create Flask app in Container
-* Run via kubectl
+### Content description
+- `Makefile` used to run tasks like setting up the python environment, install  dependencies and lint tests.
+- `Dockerfile` contains the specifications to create a Docker image of the project.
+- `app.py` this is the main python program to execute or predictions, it enables two endpoints `/` and `/predict`
+- `make_prediction.sh` this shell script makes a curl request to the endpoint `/predict` in the localhost to make a prediction with some sample data.
+- `requirements.txt` contains the list of dependencies needed to run the python program.
+- `run_docker.sh` builds the docker image with the tag `udacity-ml`, then list the images and run the container exposing the service in the host port 8000.
+- `run_kubernetes.sh` pulls the image `ecme820721/udacity-ml` from DockerHub and deploys it in the kubernetes cluster, then it gets the pod name to forward the service to port 8000 in the host.
+- `upload_docker.sh` push the docker image to DockerHub
+- `.circleci/config.yml` contains the configuration to test our project using CircleCI
